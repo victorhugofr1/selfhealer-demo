@@ -9,10 +9,10 @@ test("login mostra o botão", async ({ page }) => {
   // para a demo ser sempre igual.)
   await page.setContent('<button data-testid="login">Login</button>');
 
-  // Seletor partido DE PROPÓSITO: "#login-button" não existe nesta página, por
+  // Seletor partido DE PROPÓSITO: "#sign-in" não existe nesta página, por
   // isso o click dá timeout. A fixture deteta que é falha de seletor e captura
   // o contexto. É isto que dispara o Self-Healer.
-  await page.click("#login-button", { timeout: 5_000 });
+  await page.click("#sign-in", { timeout: 5_000 });
 
-  await expect(page.locator("#login-button")).toBeVisible();
+  await expect(page.locator("#sign-in")).toBeVisible();
 });
