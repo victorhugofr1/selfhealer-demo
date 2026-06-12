@@ -1,0 +1,30 @@
+name: e2e
+
+# Corre os testes Playwright em CI. Quando o teste parte por causa do seletor,
+# o reporter do Self-Healer envia o contexto para o backend, que abre o PR.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Instalar o browser Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Correr os testes (o reporter envia os heals ao falhar)
+        run: npx playwright test
+        env:
+          SELFHEALER_ENDPOINT: ${{ secrets.SELFHEALER_ENDPOINT }}
+          SELFHEALER_API_KEY: ${{ secrets.SELFHEALER_API_KEY }}

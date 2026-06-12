@@ -1,6 +1,18 @@
-import { test, expect } from "@playwright/test";
+// Importamos o test/expect do NOSSO package (a fixture do Self-Healer), não do
+// @playwright/test directamente. É a fixture que, quando o teste falha por causa
+// de um seletor, captura o DOM + o seletor partido para o backend corrigir.
+import { test, expect } from "@selfhealer/playwright";
 
-test("login", async ({ page }) => {
-  await page.goto("https://example.com");
-  await page.click("#login-button");
+test("login mostra o botão", async ({ page }) => {
+  // DOM determinístico: o botão que o teste "quer" existe, mas com data-testid,
+  // não com o id antigo. (Em vez de ir a um site real, montamos o HTML aqui
+  // para a demo ser sempre igual.)
+  await page.setContent('<button data-testid="login">Login</button>');
+
+  // Seletor partido DE PROPÓSITO: "#login-button" não existe nesta página, por
+  // isso o click dá timeout. A fixture deteta que é falha de seletor e captura
+  // o contexto. É isto que dispara o Self-Healer.
+  await page.click("#login-button", { timeout: 5_000 });
+
+  await expect(page.locator("#login-button")).toBeVisible();
 });
