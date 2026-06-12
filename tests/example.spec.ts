@@ -12,7 +12,7 @@ test("login mostra o botão", async ({ page }) => {
   // Seletor partido DE PROPÓSITO: "#submit-btn" não existe nesta página, por
   // isso o click dá timeout. A fixture deteta que é falha de seletor e captura
   // o contexto. É isto que dispara o Self-Healer.
-  await page.click("#subsmit-btn", { timeout: 5_000 });
+  await page.click("[data-testid='login']", { timeout: 5_000 });
 
   await expect(page.locator("#submit-btn")).toBeVisible();
 });
